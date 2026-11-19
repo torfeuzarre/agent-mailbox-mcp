@@ -1,0 +1,8 @@
+# OPTIONNEL : expose aussi le serveur sur l'IP Tailscale du VPS (Claude Desktop/Code via le tailnet,
+# ou cloudflared sur Home Assistant). Jamais sur l'IP publique.
+#   docker compose -f docker-compose.yml -f docker-compose.tailscale.yml --profile cloudflared up -d
+# Nécessite TAILSCALE_IP dans .env (`tailscale ip -4`) et tailscaled démarré avant Docker.
+services:
+  memoire:
+    ports:
+      - "${TAILSCALE_IP:?définir TAILSCALE_IP dans .env}:8765:8000"

@@ -1,0 +1,7 @@
+data/
+backups/
+.env
+config/agents.json
+__pycache__/
+.pytest_cache/
+tokens/

@@ -1,0 +1,26 @@
+# Déploiement recommandé : AUCUN port public.
+#   docker compose --profile cloudflared up -d --build
+# Le serveur n'écoute que sur 127.0.0.1:8765 ; le HTTPS public passe par un Cloudflare Tunnel
+# (connexion sortante depuis le VPS). Accès tailnet optionnel : docker-compose.tailscale.yml.
+services:
+  memoire:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/data                                # memoire.db (un seul fichier SQLite + WAL)
+      - ./config/agents.json:/config/agents.json:ro
+    ports:
+      - "127.0.0.1:8765:8000"                       # localhost uniquement
+    extra_hosts:
+      - "host.docker.internal:host-gateway"         # webhook d'un agent local (ex. port 8644 de l'hôte)
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    profiles: ["cloudflared"]
+    restart: unless-stopped
+    network_mode: host                              # pour joindre http://localhost:8765
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:?définir CLOUDFLARE_TUNNEL_TOKEN dans .env}
+    depends_on: [memoire]

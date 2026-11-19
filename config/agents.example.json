@@ -1,0 +1,23 @@
+{
+  "agents": {
+    "agent-a": {
+      "token_sha256": "REMPLACER_par_le_hash_donne_par_gen_token.py",
+      "webhook": {
+        "url": "http://host.docker.internal:8644/webhooks/memoire",
+        "secret": "REMPLACER_par_un_secret_partage_avec_le_recepteur_webhook",
+        "include_body": false
+      }
+    },
+    "agent-b": {
+      "token_sha256": "REMPLACER",
+      "webhook": {
+        "url": "https://hooks.exemple.com/votre-webhook",
+        "headers": {"REMPLACER_nom_en_tete": "REMPLACER_valeur"},
+        "include_body": false
+      }
+    },
+    "agent-c": {
+      "token_sha256": "REMPLACER"
+    }
+  }
+}

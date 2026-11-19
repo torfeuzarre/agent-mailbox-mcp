@@ -1,0 +1,7 @@
+data
+backups
+tests
+.env
+config
+.pytest_cache
+__pycache__

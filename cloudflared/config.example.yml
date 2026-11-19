@@ -1,0 +1,17 @@
+# Tunnel géré LOCALEMENT (alternative au jeton/tableau de bord Cloudflare).
+#   cloudflared tunnel login
+#   cloudflared tunnel create memoire
+#   cloudflared tunnel route dns memoire memoire.exemple.com
+#   cloudflared tunnel --config /etc/cloudflared/config.yml run memoire
+tunnel: memoire
+credentials-file: /etc/cloudflared/<UUID-DU-TUNNEL>.json
+
+ingress:
+  # Seul ce nom d'hôte est publié, vers le serveur sur le VPS
+  - hostname: memoire.exemple.com
+    service: http://localhost:8765
+  # Tout le reste : 404 (rien d'autre du VPS n'est exposé)
+  - service: http_status:404
+
+# Variante Home Assistant (cloudflared sur HA, VPS joint via Tailscale) :
+#   service: http://100.x.y.z:8765   # IP Tailscale du VPS (docker-compose.tailscale.yml requis)
